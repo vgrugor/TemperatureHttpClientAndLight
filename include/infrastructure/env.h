@@ -21,5 +21,9 @@
 
     extern const unsigned char TEMPERATURE_SENSOR_PIN;
     extern const unsigned long TEMPERATURE_READ_PERIOD;
+    extern const unsigned long TEMPERATURE_FIRST_READ_AFTER_LOAD_INTERVAL;
+    extern const unsigned long TEMPERATURE_SEND_PERIOD;
+    
+    extern const int SCHEDULER_MAX_TASKS_COUNT;
 
 #endif // ENV_H

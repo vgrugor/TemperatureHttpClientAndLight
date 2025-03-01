@@ -1,5 +1,8 @@
 #include "domain/Device.h"
 
+#ifndef SENSOR_H
+    #define SENSOR_H
+
 class Sensor : public Device {
     protected:
        unsigned long lastUpdateTime = 0;
@@ -12,3 +15,5 @@ class Sensor : public Device {
         float getLastValue() const;
         void update() override;
 };
+
+#endif // SENSOR_H
