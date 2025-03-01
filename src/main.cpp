@@ -1,10 +1,3 @@
-//#include "domain/Sensor.h"
-//#include "domain/Actuator.h"
-//#include "infrastructure/RelayActuator.h"
-//#include "infrastructure/FileSystem.h"
-//#include "application/SensorService.h"
-//#include "presentation/SerialMonitor.h"
-//#include "presentation/WebServer.h"
 #include <Arduino.h>
 #include "infrastructure/DS18B20Sensor.h"
 #include "infrastructure/env.h"
@@ -12,11 +5,23 @@
 #include "infrastructure/WebClient.h"
 #include "application/Scheduler.h"
 #include "application/SendTemperatureService.h"
+#include "infrastructure/LedActuator.h"
+#include "infrastructure/BuzzerActuator.h"
+#include "presentation/LedObserver.h"
+#include "presentation/BuzzerObserver.h"
+#include "presentation/SerialObserver.h"
+#include "presentation/EventNotifier.h"
+//#include "infrastructure/FileSystem.h"
+//#include "presentation/WebServer.h"
 
-//RelayActuator relayActuator(D5);    // Реле на пине D5
-//SensorService sensorService(dhtSensor, relayActuator);
-//SerialMonitor serialMonitor(dhtSensor);
-//WebServer webServer(sensorService);
+LedActuator greenLedActuator(GREEN_LED_PIN);
+BuzzerActuator buzzerActuator(BUZZER_PIN);
+
+LedObserver ledObserver(greenLedActuator);
+BuzzerObserver buzzerObserver(buzzerActuator);
+SerialObserver serialObserver;
+
+EventNotifier eventNotifier;
 
 DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_READ_PERIOD);
 WiFiManager wifiManager(WIFI_SSID, WIFI_PASSWORD, WIFI_IP, WIFI_GATEWAY, WIFI_SUBNET);
@@ -26,6 +31,8 @@ Scheduler scheduler(SCHEDULER_MAX_TASKS_COUNT);
 
 // Файловая система
 //FileSystem fileSystem;
+
+//WebServer webServer(sensorService);
 
 void setup() {
     Serial.begin(115200);
@@ -39,6 +46,10 @@ void setup() {
     scheduler.addTask(TEMPERATURE_SEND_PERIOD, []() {
         sendTemperatureService.send();
     });
+
+    eventNotifier.addObserver(&ledObserver);
+    eventNotifier.addObserver(&buzzerObserver);
+    eventNotifier.addObserver(&serialObserver);
 
     // Работа с файловой системой
     //if (fileSystem.writeFile("/config.txt", "Hello, LittleFS!")) {
@@ -56,8 +67,5 @@ void loop() {
     temperatureSensor.update();
     scheduler.run();
 
-    //sensorService.checkAndControl();
-    //serialMonitor.displayData();
     //webServer.handleClient();  // Обработка HTTP-запросов
-    //delay(100);  // Небольшая задержка для стабильности
 }

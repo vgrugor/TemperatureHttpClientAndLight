@@ -1,7 +1,7 @@
 #include "application/Scheduler.h"
 #include <Arduino.h>
 
-Scheduler::Scheduler(int capacity) : capacity(capacity), taskCount(0) {
+Scheduler::Scheduler(int capacity) : taskCount(0), capacity(capacity) {
     tasks = new Task[capacity];
 }
 

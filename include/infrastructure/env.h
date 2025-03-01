@@ -10,8 +10,8 @@
     extern const char* WIFI_GATEWAY;
     extern const char* WIFI_SUBNET;
 
-    //extern const int GREEN_LED_PIN;
-    //extern const int RED_LED_PIN;
+    extern const int GREEN_LED_PIN;
+    extern const int BUZZER_PIN;
 
     //extern const int LEFT_LED_MATRIX;
     //extern const int CENTER_LED_MATRIX;
