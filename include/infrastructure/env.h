@@ -20,6 +20,6 @@
     extern const int BOARD_LED;
 
     extern const unsigned char TEMPERATURE_SENSOR_PIN;
-    extern const unsigned long TEMPERATURE_UPDATE_INTERVAL;
+    extern const unsigned long TEMPERATURE_READ_PERIOD;
 
 #endif // ENV_H

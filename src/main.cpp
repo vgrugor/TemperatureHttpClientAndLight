@@ -1,18 +1,18 @@
-#include <Arduino.h>
 //#include "domain/Sensor.h"
 //#include "domain/Actuator.h"
-#include "infrastructure/DS18B20Sensor.h"
 //#include "infrastructure/RelayActuator.h"
 //#include "infrastructure/FileSystem.h"
-//#include "infrastructure/WebClient.h"
 //#include "application/SensorService.h"
-//#include "application/Scheduler.h"
 //#include "presentation/SerialMonitor.h"
 //#include "presentation/WebServer.h"
+#include <Arduino.h>
+#include "infrastructure/DS18B20Sensor.h"
 #include "infrastructure/env.h"
 #include "infrastructure/WiFiManager.h"
+#include "infrastructure/WebClient.h"
+#include "application/Scheduler.h"
 
-DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_UPDATE_INTERVAL);
+DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_READ_PERIOD);
 //RelayActuator relayActuator(D5);    // Реле на пине D5
 //SensorService sensorService(dhtSensor, relayActuator);
 //SerialMonitor serialMonitor(dhtSensor);
@@ -25,10 +25,10 @@ WiFiManager wifiManager(WIFI_SSID, WIFI_PASSWORD, WIFI_IP, WIFI_GATEWAY, WIFI_SU
 //FileSystem fileSystem;
 
 // Веб-клиент
-//WebClient webClient;
+WebClient webClient;
 
 // Планировщик задач
-//Scheduler scheduler(10);  // Максимум 10 задач
+Scheduler scheduler(10);  // Максимум 10 задач
 
 void setup() {
     Serial.begin(115200);
@@ -44,21 +44,25 @@ void setup() {
     //String data = fileSystem.readFile("/config.txt");
     //Serial.println("File content: " + data);
 
-    // Добавление задач в планировщик
-    //scheduler.addTask(5000, []() {  // Каждые 5 секунд
-    //    float temperature = dhtSensor.readValue();
-    //    Serial.println("Current temperature: " + String(temperature));
-    //});
+    scheduler.addTask(5000, []() {  // Однократно через 5 секунд
+        Serial.println("start task 1");
+        float temperature = temperatureSensor.getLastValue();
+        char buffer[20];
+        sprintf(buffer, "%.2f", temperature);
+        String serverPath = "http://192.168.1.200:80/outdoor/temperature?temp=" + String(buffer);
+        webClient.get(serverPath.c_str());
+        Serial.println("Current temperature: " + String(temperature));
+    }, false);
 
-    //scheduler.addTask(10000, []() {  // Каждые 10 секунд
-    //    String jsonData = "{\"temperature\": " + String(dhtSensor.readValue()) + "}";
-    //    String response = webClient.post("http://example.com/api/data", jsonData);
-    //    Serial.println("Server response: " + response);
-    //});
-
-    //scheduler.addTask(30000, []() {  // Однократно через 30 секунд
-    //    Serial.println("This task runs only once after 30 seconds");
-    //}, false);
+    scheduler.addTask(60000, []() {  // Каждые 10 минут
+        Serial.println("start task 10");
+        float temperature = temperatureSensor.getLastValue();
+        char buffer[20];
+        sprintf(buffer, "%.2f", temperature);
+        String serverPath = "http://192.168.1.200:80/outdoor/temperature?temp=" + String(buffer);
+        webClient.get(serverPath.c_str());
+        Serial.println("Current temperature: " + String(temperature));
+    });
 
     // Запуск веб-сервера
     //webServer.begin();
@@ -71,7 +75,7 @@ void loop() {
     //webServer.handleClient();  // Обработка HTTP-запросов
 
     // Выполнение задач из планировщика
-    //scheduler.run();
+    scheduler.run();
 
     //delay(100);  // Небольшая задержка для стабильности
 }
