@@ -16,7 +16,8 @@ float DS18B20Sensor::readValue() {
 
     delay(DS18B20Sensor::DELAY_GETTING_VALUE);
 
-    Serial.println("Temperature: " + String(temperatureC));
+    String temperatureCString = String(temperatureC, 2);
+    EventNotifier::getInstance().notifyObservers(EventType::READ_TEMPERATURE, temperatureCString);
 
     return temperatureC;
 }

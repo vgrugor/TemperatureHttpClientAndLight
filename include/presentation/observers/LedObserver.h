@@ -3,7 +3,7 @@
 
     #include <Arduino.h>
     #include "Observer.h"
-    #include "EventType.h"
+    #include "presentation/EventType.h"
     #include "infrastructure/LedActuator.h"
 
     class LedObserver : public Observer {
@@ -12,7 +12,7 @@
 
         public:
             LedObserver(LedActuator ledActuator);
-            void update(EventType eventType) override;
+            void update(EventType eventType, const String& message = "") override;
     };
 
 #endif // LED_OBSERVER_H

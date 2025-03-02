@@ -3,7 +3,7 @@
 
     #include <Arduino.h>
     #include "Observer.h"
-    #include "EventType.h"
+    #include "presentation/EventType.h"
     #include "infrastructure/BuzzerActuator.h"
 
     class BuzzerObserver : public Observer {
@@ -12,7 +12,7 @@
 
         public:
             BuzzerObserver(BuzzerActuator buzzerActuator);
-            void update(EventType eventType) override;
+            void update(EventType eventType, const String& message = "") override;
     };
 
 #endif // BUZZER_OBSERVER_H

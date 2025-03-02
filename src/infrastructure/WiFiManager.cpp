@@ -26,26 +26,24 @@ void WiFiManager::connect() {
     subnet.fromString(this->subnet);
 
     WiFi.mode(WIFI_STA);
-
     WiFi.config(ip, gateway, subnet);
-
     WiFi.begin(ssid, password);
 
-    Serial.print("Connecting to Wi-Fi");
+    EventNotifier& eventNotifier = EventNotifier::getInstance();
+
+    eventNotifier.notifyObservers(EventType::WIFI_START_CONNECT);
 
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
-        Serial.print(".");
+        eventNotifier.notifyObservers(EventType::WIFI_TRY_CONNECT);
     }
 
-    Serial.println();
-    Serial.println("Connected to Wi-Fi");
-    Serial.println(WiFi.localIP());
+    eventNotifier.notifyObservers(EventType::WIFI_CONNECTED);
 }
 
 void WiFiManager::reconnect() {
     if (!isConnected()) {
-        Serial.println("Reconnecting to Wi-Fi...");
+        EventNotifier::getInstance().notifyObservers(EventType::WIFI_RECONNECT);
         connect();
     }
 }

@@ -1,5 +1,7 @@
 #include "infrastructure/WebClient.h"
 #include "domain/Sensor.h"
+#include "presentation/EventType.h"
+#include "presentation/EventNotifier.h"
 
 class SendTemperatureService {
     private:
