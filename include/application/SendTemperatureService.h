@@ -2,6 +2,7 @@
 #include "domain/Sensor.h"
 #include "presentation/EventType.h"
 #include "presentation/EventNotifier.h"
+#include "infrastructure/env.h"
 
 class SendTemperatureService {
     private:

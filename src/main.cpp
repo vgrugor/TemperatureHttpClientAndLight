@@ -5,7 +5,7 @@
 #include "infrastructure/WebClient.h"
 #include "application/Scheduler.h"
 #include "application/SendTemperatureService.h"
-#include "infrastructure/LedActuator.h"
+#include "infrastructure/ExternalLedActuator.h"
 #include "infrastructure/BuzzerActuator.h"
 #include "presentation/observers/LedObserver.h"
 #include "presentation/observers/BuzzerObserver.h"
@@ -14,10 +14,10 @@
 //#include "infrastructure/FileSystem.h"
 //#include "presentation/WebServer.h"
 
-LedActuator greenLedActuator(GREEN_LED_PIN);
+ExternalLedActuator externalLedActuator(GREEN_LED_PIN);
 BuzzerActuator buzzerActuator(BUZZER_PIN);
 
-LedObserver ledObserver(greenLedActuator);
+LedObserver ledObserver(externalLedActuator);
 BuzzerObserver buzzerObserver(buzzerActuator);
 SerialObserver serialObserver;
 

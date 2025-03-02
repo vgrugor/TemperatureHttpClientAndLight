@@ -4,14 +4,14 @@
     #include <Arduino.h>
     #include "Observer.h"
     #include "presentation/EventType.h"
-    #include "infrastructure/LedActuator.h"
+    #include "infrastructure/ExternalLedActuator.h"
 
     class LedObserver : public Observer {
         private:
-            LedActuator ledActuator;
+            ExternalLedActuator externalLedActuator;
 
         public:
-            LedObserver(LedActuator ledActuator);
+            LedObserver(ExternalLedActuator externalLedActuator);
             void update(EventType eventType, const String& message = "") override;
     };
 
