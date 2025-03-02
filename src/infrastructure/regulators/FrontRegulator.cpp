@@ -4,7 +4,7 @@ FrontRegulator::FrontRegulator(int pin) : pin(pin) {
     pinMode(pin, OUTPUT);
 }
 
-void FrontRegulator::setLevel(uint8_t level) {
+void FrontRegulator::setLevel(uint16_t level) {
     if (level > 1023) {
         level = 1023;
     }

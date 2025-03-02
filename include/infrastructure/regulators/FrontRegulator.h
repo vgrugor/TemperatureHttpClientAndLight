@@ -10,7 +10,7 @@
 
         public:
             FrontRegulator(int pin);
-            void setLevel(uint8_t level) override;
+            void setLevel(uint16_t level) override;
             void update() override;
     };
 

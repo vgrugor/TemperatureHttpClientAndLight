@@ -11,6 +11,10 @@
 #include "presentation/observers/BuzzerObserver.h"
 #include "presentation/observers/SerialObserver.h"
 #include "presentation/EventNotifier.h"
+#include "infrastructure/regulators/FrontRegulator.h"
+#include "infrastructure/regulators/MiddleRegulator.h"
+#include "infrastructure/regulators/BackRegulator.h"
+#include "application/LightManagerService.h"
 //#include "infrastructure/FileSystem.h"
 //#include "presentation/WebServer.h"
 
@@ -22,6 +26,12 @@ BuzzerObserver buzzerObserver(buzzerActuator);
 SerialObserver serialObserver;
 
 EventNotifier& eventNotifier = EventNotifier::getInstance();
+
+FrontRegulator frontRegulator(FRONT_LED_MATRIX);
+FrontRegulator middleRegulator(MIDDLE_LED_MATRIX);
+FrontRegulator backRegulator(BACK_LED_MATRIX);
+
+LightManagerService lightManagerService(frontRegulator, middleRegulator, backRegulator);
 
 DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_READ_PERIOD);
 WiFiManager wifiManager(WIFI_SSID, WIFI_PASSWORD, WIFI_IP, WIFI_GATEWAY, WIFI_SUBNET);

@@ -4,7 +4,7 @@ BackRegulator::BackRegulator(int pin) : pin(pin) {
     pinMode(pin, OUTPUT);
 }
 
-void BackRegulator::setLevel(uint8_t level) {
+void BackRegulator::setLevel(uint16_t level) {
     if (level > 1023) {
         level = 1023;
     }
