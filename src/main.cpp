@@ -15,8 +15,9 @@
 #include "infrastructure/regulators/MiddleRegulator.h"
 #include "infrastructure/regulators/BackRegulator.h"
 #include "application/LightManagerService.h"
-//#include "infrastructure/FileSystem.h"
-//#include "presentation/WebServer.h"
+#include "infrastructure/FileSystem.h"
+#include "infrastructure/WebSocket.h"
+#include "infrastructure/WebServer.h"
 
 ExternalLedActuator externalLedActuator(GREEN_LED_PIN);
 BuzzerActuator buzzerActuator(BUZZER_PIN);
@@ -39,10 +40,9 @@ WebClient webClient;
 SendTemperatureService sendTemperatureService(temperatureSensor, webClient);
 Scheduler scheduler(SCHEDULER_MAX_TASKS_COUNT);
 
-// Файловая система
-//FileSystem fileSystem;
-
-//WebServer webServer(sensorService);
+FileSystem fileSystem;
+WebSocket webSocket;
+WebServer webServer(webSocket, fileSystem);
 
 void setup() {
     Serial.begin(115200);
@@ -61,22 +61,18 @@ void setup() {
         sendTemperatureService.send();
     });
 
-    // Работа с файловой системой
-    //if (fileSystem.writeFile("/config.txt", "Hello, LittleFS!")) {
-    //    Serial.println("File written successfully");
-    //}
-
-    //String data = fileSystem.readFile("/config.txt");
-    //Serial.println("File content: " + data);
-
-    // Запуск веб-сервера
-    //webServer.begin();
+    webServer.begin();
 }
 
 void loop() {
     wifiManager.reconnect();
+
     temperatureSensor.update();
+    frontRegulator.update();
+    middleRegulator.update();
+    backRegulator.update();
+
     scheduler.run();
 
-    //webServer.handleClient();  // Обработка HTTP-запросов
+    webServer.handleClient();
 }

@@ -5,13 +5,8 @@
     #include <Arduino.h>
 
     class MiddleRegulator : public Regulator {
-        private:
-            int pin;
-
         public:
-            MiddleRegulator(int pin);
-            void setLevel(uint16_t level) override;
-            void update() override;
+           MiddleRegulator(int pin);
     };
 
 #endif // MIDDLE_REGULATOR_H
