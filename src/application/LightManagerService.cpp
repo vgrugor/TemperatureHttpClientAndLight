@@ -6,12 +6,26 @@ LightManagerService::LightManagerService(Regulator& frontRegulator, Regulator& m
     backRegulator(backRegulator)
 {}
 
-void LightManagerService::setLevelForAll(int level) {
+void LightManagerService::changeAllLedMatrixLevel(int level) {
     this->frontRegulator.setLevel(level);
     this->middleRegulator.setLevel(level);
     this->backRegulator.setLevel(level);
 }
 
-void LightManagerService::setLevel(String regulator, int level) {
+void LightManagerService::changeTimerMinute(int level) {
+    //String timerMinute = message.substring(2);
+    //wsData.setTimerMinute(timerMinute.toInt());
+    //this->taskScheduler.addTaskInMinutes(wsData.getTimerMinute(), DisableAllLedMatrixTask::run);
+}
 
+void LightManagerService::changeFrontLedMatrixLevel(int level) {
+    this->frontRegulator.setLevel(level);
+}
+
+void LightManagerService::changeMiddleLedMatrixLevel(int level) {
+    this->middleRegulator.setLevel(level);
+}
+
+void LightManagerService::changeBackLedMatrixLevel(int level) {
+    this->backRegulator.setLevel(level);
 }

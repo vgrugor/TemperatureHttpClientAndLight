@@ -18,6 +18,6 @@ void Sensor::update() {
     }
 }
 
-float Sensor::getLastValue() const {
+float Sensor::getLastValue() {
     return this->value;
 }

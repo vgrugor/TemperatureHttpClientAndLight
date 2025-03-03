@@ -1,6 +1,12 @@
 #include "infrastructure/WebSocket.h"
 
-WebSocket::WebSocket() : webSocket("/ws") {
+WebSocket::WebSocket(
+    WsMessageHandler& wsMessageHandler, 
+    WsDataTransformer& wsDataTransformer
+) : wsMessageHandler(wsMessageHandler), 
+    wsDataTransformer(wsDataTransformer), 
+    webSocket("/ws") 
+{
     webSocket.onEvent([this](AsyncWebSocket* server, AsyncWebSocketClient* client, AwsEventType type, void* arg, uint8_t* data, size_t len) {
         handleEvent(server, client, type, arg, data, len);
     });
@@ -31,16 +37,15 @@ void WebSocket::handleMessage(void* arg, uint8_t* data, size_t len) {
         data[len] = 0;
         String message = (char*)data;
 
-        //WsMessageResolver wsMessageResolver;
-        //if (wsMessageResolver.resolve(message)) {
-        //    this->notifyClients();
-        //}
+        if (this->wsMessageHandler.handle(message)) {
+            this->notifyClients();
+        }
     }
 }
 
 void WebSocket::notifyClients() {
     Serial.println("Notify clients");
-    //webSocket.textAll(wsData.toJSON());
+    webSocket.textAll(this->wsDataTransformer.toJSON());
 }
 
 AsyncWebSocket* WebSocket::getWebSocketObject() {

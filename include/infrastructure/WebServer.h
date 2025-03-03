@@ -11,9 +11,7 @@
             AsyncWebServer server;
             WebSocket& webSocket;
             FileSystem& fileSystem;
-
             void handleRoot(AsyncWebServerRequest* request);
-            void handleOutdoorTemperature(AsyncWebServerRequest* request);
 
         public:
             WebServer(WebSocket& webSocket, FileSystem& fileSystem);

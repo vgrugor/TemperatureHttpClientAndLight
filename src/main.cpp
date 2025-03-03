@@ -18,6 +18,8 @@
 #include "infrastructure/FileSystem.h"
 #include "infrastructure/WebSocket.h"
 #include "infrastructure/WebServer.h"
+#include "application/WsMessageHandler.h"
+#include "application/WsDataTransformer.h"
 
 ExternalLedActuator externalLedActuator(GREEN_LED_PIN);
 BuzzerActuator buzzerActuator(BUZZER_PIN);
@@ -28,12 +30,6 @@ SerialObserver serialObserver;
 
 EventNotifier& eventNotifier = EventNotifier::getInstance();
 
-FrontRegulator frontRegulator(FRONT_LED_MATRIX);
-FrontRegulator middleRegulator(MIDDLE_LED_MATRIX);
-FrontRegulator backRegulator(BACK_LED_MATRIX);
-
-LightManagerService lightManagerService(frontRegulator, middleRegulator, backRegulator);
-
 DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_READ_PERIOD);
 WiFiManager wifiManager(WIFI_SSID, WIFI_PASSWORD, WIFI_IP, WIFI_GATEWAY, WIFI_SUBNET);
 WebClient webClient;
@@ -41,7 +37,16 @@ SendTemperatureService sendTemperatureService(temperatureSensor, webClient);
 Scheduler scheduler(SCHEDULER_MAX_TASKS_COUNT);
 
 FileSystem fileSystem;
-WebSocket webSocket;
+
+FrontRegulator frontRegulator(FRONT_LED_MATRIX);
+MiddleRegulator middleRegulator(MIDDLE_LED_MATRIX);
+BackRegulator backRegulator(BACK_LED_MATRIX);
+
+WsDataTransformer wsDataTransformer(frontRegulator, middleRegulator, backRegulator, temperatureSensor);
+
+LightManagerService lightManagerService(frontRegulator, middleRegulator, backRegulator);
+WsMessageHandler wsMessageHandler(lightManagerService);
+WebSocket webSocket(wsMessageHandler, wsDataTransformer);
 WebServer webServer(webSocket, fileSystem);
 
 void setup() {
