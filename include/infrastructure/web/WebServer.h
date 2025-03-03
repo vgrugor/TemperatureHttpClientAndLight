@@ -3,8 +3,8 @@
 
     #include <Arduino.h>
     #include <ESPAsyncWebServer.h>
-    #include "infrastructure/WebSocket.h"
-    #include "infrastructure/FileSystem.h"
+    #include "infrastructure/web/WebSocket.h"
+    #include "infrastructure/fs/FileSystem.h"
 
     class WebServer {
         private:

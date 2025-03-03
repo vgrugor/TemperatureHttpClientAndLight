@@ -7,7 +7,7 @@
     #include "infrastructure/regulators/FrontRegulator.h"
     #include "infrastructure/regulators/MiddleRegulator.h"
     #include "infrastructure/regulators/BackRegulator.h"
-    #include "infrastructure/DS18B20Sensor.h"
+    #include "infrastructure/sensors/DS18B20Sensor.h"
     #include "application/SettingsStorage.h"
 
     class WsDataTransformer {

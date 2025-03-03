@@ -1,4 +1,4 @@
-#include "infrastructure/WiFiManager.h"
+#include "infrastructure/wifi/WiFiManager.h"
 #include <Arduino.h>
 
 WiFiManager::WiFiManager(

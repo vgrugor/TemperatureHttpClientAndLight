@@ -20,10 +20,16 @@ void LightManagerService::changeAllLedMatrixLevel(int level) {
 void LightManagerService::changeTimerMinute(int timerMinute) {
     SettingsStorage::getInstance().setTimerMinute(timerMinute);
 
-    this->scheduler.addTask(timerMinute * 60 * 1000, [this]() {
+    EventNotifier& eventNotifier = EventNotifier::getInstance();
+    eventNotifier.notifyObservers(EventType::TIMER_SET);
+
+    this->scheduler.addTask(timerMinute * 60 * 1000, [this, &eventNotifier]() {
         this->changeAllLedMatrixLevel(0);
+
         SettingsStorage::getInstance().setTimerMinute(0);
-        EventNotifier::getInstance().notifyObservers(EventType::WEB_SOCKET_NOTIFY_CLIENT);
+
+        eventNotifier.notifyObservers(EventType::WEB_SOCKET_NOTIFY_CLIENT);
+        eventNotifier.notifyObservers(EventType::TIMER_APPLIED);
     }, false);
 }
 

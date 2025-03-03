@@ -1,5 +1,4 @@
-// DS18B20Sensor.cpp
-#include "infrastructure/DS18B20Sensor.h"
+#include "infrastructure/sensors/DS18B20Sensor.h"
 #include <Arduino.h>
 
 DS18B20Sensor::DS18B20Sensor(int pin, unsigned long updateInterval) : Sensor(updateInterval), oneWire(pin), sensors(&oneWire) {

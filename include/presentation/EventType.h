@@ -14,6 +14,10 @@
 
         //web socket events
         WEB_SOCKET_NOTIFY_CLIENT,
+
+        //timer events
+        TIMER_SET,
+        TIMER_APPLIED,
     };
 
 #endif

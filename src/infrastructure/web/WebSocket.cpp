@@ -1,4 +1,4 @@
-#include "infrastructure/WebSocket.h"
+#include "infrastructure/web/WebSocket.h"
 
 WebSocket::WebSocket(
     WsMessageHandler& wsMessageHandler, 

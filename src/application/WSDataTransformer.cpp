@@ -56,7 +56,6 @@ String WsDataTransformer::toJSON()
     sliderValues["sliderValue4"] = String(this->getMiddleLedMatrixLevel());
     sliderValues["sliderValue5"] = String(this->getBackLedMatrixLevel());
     sliderValues["sliderValue6"] = String(this->getTemperature());
-    sliderValues["sliderValue7"] = 0; //TODO: Delete this
 
     return JSON.stringify(sliderValues);
 }

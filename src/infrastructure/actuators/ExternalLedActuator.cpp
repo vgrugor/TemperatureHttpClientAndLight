@@ -1,4 +1,4 @@
-#include "infrastructure/ExternalLedActuator.h"
+#include "infrastructure/actuators/ExternalLedActuator.h"
 
 ExternalLedActuator::ExternalLedActuator(int pin) : pin(pin) {
     pinMode(pin, OUTPUT);

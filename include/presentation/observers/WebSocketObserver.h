@@ -4,7 +4,7 @@
     #include <Arduino.h>
     #include "Observer.h"
     #include "presentation/EventType.h"
-    #include "infrastructure/WebSocket.h"
+    #include "infrastructure/web/WebSocket.h"
 
     class WebSocketObserver : public Observer {
         private:
