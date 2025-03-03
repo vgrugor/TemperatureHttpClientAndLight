@@ -44,7 +44,7 @@ BackRegulator backRegulator(BACK_LED_MATRIX);
 
 WsDataTransformer wsDataTransformer(frontRegulator, middleRegulator, backRegulator, temperatureSensor);
 
-LightManagerService lightManagerService(frontRegulator, middleRegulator, backRegulator);
+LightManagerService lightManagerService(frontRegulator, middleRegulator, backRegulator, scheduler);
 WsMessageHandler wsMessageHandler(lightManagerService);
 WebSocket webSocket(wsMessageHandler, wsDataTransformer);
 WebServer webServer(webSocket, fileSystem);

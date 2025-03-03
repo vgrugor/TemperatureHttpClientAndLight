@@ -8,6 +8,7 @@
     #include "infrastructure/regulators/MiddleRegulator.h"
     #include "infrastructure/regulators/BackRegulator.h"
     #include "infrastructure/DS18B20Sensor.h"
+    #include "application/SettingsStorage.h"
 
     class WsDataTransformer {
         public:
@@ -30,6 +31,7 @@
             MiddleRegulator& middleRegulator;
             BackRegulator& backRegulator;
             DS18B20Sensor& temperatureSensor;
+            SettingsStorage& settingsStorage;
     };
 
 #endif //WS_DATA_TRANSFORMER_H

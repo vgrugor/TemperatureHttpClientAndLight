@@ -2,15 +2,18 @@
     #define LIGHT_MANAGER_SERVICE_H
 
     #include "domain/Regulator.h"
+    #include "application/Scheduler.h"
+    #include "application/SettingsStorage.h"
 
     class LightManagerService {
         private:
             Regulator& frontRegulator;
             Regulator& middleRegulator;
             Regulator& backRegulator;
+            Scheduler& scheduler;
 
         public:
-            LightManagerService(Regulator& frontRegulator, Regulator& middleRegulator, Regulator& backRegulator);
+            LightManagerService(Regulator& frontRegulator, Regulator& middleRegulator, Regulator& backRegulator, Scheduler& scheduler);
             void changeAllLedMatrixLevel(int level);
             void changeTimerMinute(int level);
             void changeFrontLedMatrixLevel(int level);

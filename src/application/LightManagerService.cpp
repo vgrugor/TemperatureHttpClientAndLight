@@ -1,9 +1,14 @@
 #include "application/LightManagerService.h"
 
-LightManagerService::LightManagerService(Regulator& frontRegulator, Regulator& middleRegulator, Regulator& backRegulator) 
-    : frontRegulator(frontRegulator), 
+LightManagerService::LightManagerService(
+    Regulator& frontRegulator, 
+    Regulator& middleRegulator, 
+    Regulator& backRegulator,
+    Scheduler& scheduler
+) : frontRegulator(frontRegulator), 
     middleRegulator(middleRegulator),
-    backRegulator(backRegulator)
+    backRegulator(backRegulator),
+    scheduler(scheduler)
 {}
 
 void LightManagerService::changeAllLedMatrixLevel(int level) {
@@ -12,10 +17,14 @@ void LightManagerService::changeAllLedMatrixLevel(int level) {
     this->backRegulator.setLevel(level);
 }
 
-void LightManagerService::changeTimerMinute(int level) {
-    //String timerMinute = message.substring(2);
-    //wsData.setTimerMinute(timerMinute.toInt());
-    //this->taskScheduler.addTaskInMinutes(wsData.getTimerMinute(), DisableAllLedMatrixTask::run);
+void LightManagerService::changeTimerMinute(int timerMinute) {
+    SettingsStorage::getInstance().setTimerMinute(timerMinute);
+
+    this->scheduler.addTask(timerMinute * 60 * 1000, [this]() {
+        this->changeAllLedMatrixLevel(0);
+        SettingsStorage::getInstance().setTimerMinute(0);
+    }, false);
+    // TODO: notify client
 }
 
 void LightManagerService::changeFrontLedMatrixLevel(int level) {

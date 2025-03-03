@@ -8,7 +8,8 @@ WsDataTransformer::WsDataTransformer(
 ) : frontRegulator(frontRegulator), 
     middleRegulator(middleRegulator), 
     backRegulator(backRegulator),
-    temperatureSensor(temperatureSensor)
+    temperatureSensor(temperatureSensor),
+    settingsStorage(SettingsStorage::getInstance())
 {}
 
 int WsDataTransformer::getFrontLedMatrixLevel()
@@ -37,7 +38,7 @@ int WsDataTransformer::getAllLedMatrixLevel()
 
 int WsDataTransformer::getTimerMinute()
 {
-    return 0; //TODO: Implement this method
+    return this->settingsStorage.getTimerMinute();
 }
 
 float WsDataTransformer::getTemperature()
