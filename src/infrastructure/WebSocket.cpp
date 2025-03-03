@@ -8,7 +8,7 @@ WebSocket::WebSocket(
     webSocket("/ws") 
 {
     webSocket.onEvent([this](AsyncWebSocket* server, AsyncWebSocketClient* client, AwsEventType type, void* arg, uint8_t* data, size_t len) {
-        handleEvent(server, client, type, arg, data, len);
+        this->handleEvent(server, client, type, arg, data, len);
     });
 }
 
@@ -31,7 +31,6 @@ void WebSocket::handleEvent(AsyncWebSocket* server, AsyncWebSocketClient* client
 }
 
 void WebSocket::handleMessage(void* arg, uint8_t* data, size_t len) {
-    Serial.println("Run ws handler");
     AwsFrameInfo* info = (AwsFrameInfo*)arg;
     if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
         data[len] = 0;
@@ -44,8 +43,7 @@ void WebSocket::handleMessage(void* arg, uint8_t* data, size_t len) {
 }
 
 void WebSocket::notifyClients() {
-    Serial.println("Notify clients");
-    webSocket.textAll(this->wsDataTransformer.toJSON());
+    this->webSocket.textAll(this->wsDataTransformer.toJSON());
 }
 
 AsyncWebSocket* WebSocket::getWebSocketObject() {
@@ -53,5 +51,5 @@ AsyncWebSocket* WebSocket::getWebSocketObject() {
 }
 
 void WebSocket::cleanupClients() {
-    webSocket.cleanupClients();
+    this->webSocket.cleanupClients();
 }

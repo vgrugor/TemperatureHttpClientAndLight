@@ -4,6 +4,8 @@
     #include "domain/Regulator.h"
     #include "application/Scheduler.h"
     #include "application/SettingsStorage.h"
+    #include "presentation/EventNotifier.h"
+    #include "presentation/EventType.h"
 
     class LightManagerService {
         private:

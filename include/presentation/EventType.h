@@ -11,6 +11,9 @@
         //temperature events
         READ_TEMPERATURE,
         SEND_TEMPERATURE,
+
+        //web socket events
+        WEB_SOCKET_NOTIFY_CLIENT,
     };
 
 #endif

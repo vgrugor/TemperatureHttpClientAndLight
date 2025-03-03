@@ -23,8 +23,8 @@ void LightManagerService::changeTimerMinute(int timerMinute) {
     this->scheduler.addTask(timerMinute * 60 * 1000, [this]() {
         this->changeAllLedMatrixLevel(0);
         SettingsStorage::getInstance().setTimerMinute(0);
+        EventNotifier::getInstance().notifyObservers(EventType::WEB_SOCKET_NOTIFY_CLIENT);
     }, false);
-    // TODO: notify client
 }
 
 void LightManagerService::changeFrontLedMatrixLevel(int level) {

@@ -1,25 +1,22 @@
 #include "infrastructure/WebServer.h"
 
-WebServer::WebServer(WebSocket& webSocket, FileSystem& fileSystem) 
-    : server(80), 
+WebServer::WebServer(
+    WebSocket& webSocket, 
+    FileSystem& fileSystem   
+) : server(80), 
     webSocket(webSocket), 
     fileSystem(fileSystem) 
 {}
 
 void WebServer::begin() {
-    // Добавление WebSocket handler
     server.addHandler(webSocket.getWebSocketObject());
 
-    // Инициализация маршрутов
     server.on("/", HTTP_GET, [this](AsyncWebServerRequest* request) {
         handleRoot(request);
     });
 
     server.serveStatic("/", LittleFS, "/");
-
-    Serial.println("Starting web server...");
     server.begin();
-    Serial.println("Web server started");
 }
 
 void WebServer::handleRoot(AsyncWebServerRequest* request) {
@@ -31,6 +28,4 @@ void WebServer::handleRoot(AsyncWebServerRequest* request) {
     }
 }
 
-void WebServer::handleClient() {
-    // Можно добавить метод для обработки клиентов, если нужно
-}
+void WebServer::handleClient() {}
