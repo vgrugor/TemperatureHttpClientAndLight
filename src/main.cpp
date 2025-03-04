@@ -3,7 +3,7 @@
 #include "infrastructure/env.h"
 #include "infrastructure/wifi/WiFiManager.h"
 #include "infrastructure/web/WebClient.h"
-#include "application/Scheduler.h"
+#include "application/scheduler/Scheduler.h"
 #include "application/SendTemperatureService.h"
 #include "infrastructure/actuators/ExternalLedActuator.h"
 #include "infrastructure/actuators/BuzzerActuator.h"
@@ -21,6 +21,7 @@
 #include "presentation/WebServer.h"
 #include "application/WsMessageHandler.h"
 #include "application/WsDataTransformer.h"
+#include "application/scheduler/TaskIds.h"
 
 DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_READ_PERIOD);
 WiFiManager wifiManager(WIFI_SSID, WIFI_PASSWORD, WIFI_IP, WIFI_GATEWAY, WIFI_SUBNET);
@@ -61,13 +62,22 @@ void setup() {
 
     wifiManager.connect();
 
-    scheduler.addTask(TEMPERATURE_FIRST_READ_AFTER_LOAD_INTERVAL, []() {
-        sendTemperatureService.send();
-    }, false);
+    scheduler.addTask(
+        TaskIds::TEMPERATURE_FIRST_READ_AFTER_LOAD,
+        TEMPERATURE_FIRST_READ_AFTER_LOAD_INTERVAL, 
+        []() {
+            sendTemperatureService.send();
+        }, 
+        false
+    );
 
-    scheduler.addTask(TEMPERATURE_SEND_PERIOD, []() {
-        sendTemperatureService.send();
-    });
+    scheduler.addTask(
+        TaskIds::TEMPERATURE_SEND,
+        TEMPERATURE_SEND_PERIOD, 
+        []() {
+            sendTemperatureService.send();
+        }
+    );
 
     webServer.begin();
 }

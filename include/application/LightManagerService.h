@@ -2,10 +2,11 @@
     #define LIGHT_MANAGER_SERVICE_H
 
     #include "domain/Regulator.h"
-    #include "application/Scheduler.h"
+    #include "application/scheduler/Scheduler.h"
     #include "application/SettingsStorage.h"
     #include "presentation/EventNotifier.h"
     #include "presentation/EventType.h"
+    #include "application/scheduler/TaskIds.h"
 
     class LightManagerService {
         private:

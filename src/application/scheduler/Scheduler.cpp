@@ -1,4 +1,4 @@
-#include "application/Scheduler.h"
+#include "application/scheduler/Scheduler.h"
 #include <Arduino.h>
 
 Scheduler::Scheduler(int capacity) : taskCount(0), capacity(capacity) {
@@ -9,15 +9,27 @@ Scheduler::~Scheduler() {
     delete[] tasks;
 }
 
-void Scheduler::addTask(unsigned long interval, std::function<void()> callback, bool repeat) {
+void Scheduler::addTask(String taskId, unsigned long interval, std::function<void()> callback, bool repeat) {
+    for (int i = 0; i < taskCount; i++) {
+        if (!taskId.isEmpty() && tasks[i].taskId == taskId) {
+            tasks[i].interval = interval;
+            tasks[i].lastRun = 0;
+            tasks[i].callback = callback;
+            tasks[i].repeat = repeat;
+
+            return;
+        }
+    }
+
     if (taskCount < capacity) {
-        tasks[taskCount] = {interval, 0, callback, repeat};
+        tasks[taskCount] = {taskId, interval, 0, callback, repeat};
         taskCount++;
     }
 }
 
 void Scheduler::run() {
     unsigned long currentTime = millis();
+
     for (int i = 0; i < taskCount; i++) {
         if (currentTime - tasks[i].lastRun >= tasks[i].interval) {
             tasks[i].callback();
