@@ -10,6 +10,7 @@
 #include "presentation/observers/LedObserver.h"
 #include "presentation/observers/BuzzerObserver.h"
 #include "presentation/observers/SerialObserver.h"
+#include "presentation/observers/WebSocketObserver.h"
 #include "presentation/EventNotifier.h"
 #include "infrastructure/regulators/FrontRegulator.h"
 #include "infrastructure/regulators/MiddleRegulator.h"
@@ -20,15 +21,6 @@
 #include "presentation/WebServer.h"
 #include "application/WsMessageHandler.h"
 #include "application/WsDataTransformer.h"
-
-ExternalLedActuator externalLedActuator(GREEN_LED_PIN);
-BuzzerActuator buzzerActuator(BUZZER_PIN);
-
-LedObserver ledObserver(externalLedActuator);
-BuzzerObserver buzzerObserver(buzzerActuator);
-SerialObserver serialObserver;
-
-EventNotifier& eventNotifier = EventNotifier::getInstance();
 
 DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_READ_PERIOD);
 WiFiManager wifiManager(WIFI_SSID, WIFI_PASSWORD, WIFI_IP, WIFI_GATEWAY, WIFI_SUBNET);
@@ -49,12 +41,23 @@ WsMessageHandler wsMessageHandler(lightManagerService);
 WebSocket webSocket(wsMessageHandler, wsDataTransformer);
 WebServer webServer(webSocket, fileSystem);
 
+ExternalLedActuator externalLedActuator(GREEN_LED_PIN);
+BuzzerActuator buzzerActuator(BUZZER_PIN);
+
+LedObserver ledObserver(externalLedActuator);
+BuzzerObserver buzzerObserver(buzzerActuator);
+SerialObserver serialObserver;
+WebSocketObserver webSocketObserver(webSocket);
+
+EventNotifier& eventNotifier = EventNotifier::getInstance();
+
 void setup() {
     Serial.begin(115200);
 
     eventNotifier.addObserver(&ledObserver);
     eventNotifier.addObserver(&buzzerObserver);
     eventNotifier.addObserver(&serialObserver);
+    eventNotifier.addObserver(&webSocketObserver);
 
     wifiManager.connect();
 
