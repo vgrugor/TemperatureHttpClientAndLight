@@ -1,4 +1,4 @@
-#include "infrastructure/BuzzerActuator.h"
+#include "infrastructure/actuators/BuzzerActuator.h"
 
 BuzzerActuator::BuzzerActuator(int pin) : pin(pin) {
     pinMode(pin, OUTPUT);

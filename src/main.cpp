@@ -1,18 +1,25 @@
 #include <Arduino.h>
-#include "infrastructure/DS18B20Sensor.h"
+#include "infrastructure/sensors/DS18B20Sensor.h"
 #include "infrastructure/env.h"
-#include "infrastructure/WiFiManager.h"
-#include "infrastructure/WebClient.h"
+#include "infrastructure/wifi/WiFiManager.h"
+#include "infrastructure/web/WebClient.h"
 #include "application/Scheduler.h"
 #include "application/SendTemperatureService.h"
-#include "infrastructure/ExternalLedActuator.h"
-#include "infrastructure/BuzzerActuator.h"
+#include "infrastructure/actuators/ExternalLedActuator.h"
+#include "infrastructure/actuators/BuzzerActuator.h"
 #include "presentation/observers/LedObserver.h"
 #include "presentation/observers/BuzzerObserver.h"
 #include "presentation/observers/SerialObserver.h"
 #include "presentation/EventNotifier.h"
-//#include "infrastructure/FileSystem.h"
-//#include "presentation/WebServer.h"
+#include "infrastructure/regulators/FrontRegulator.h"
+#include "infrastructure/regulators/MiddleRegulator.h"
+#include "infrastructure/regulators/BackRegulator.h"
+#include "application/LightManagerService.h"
+#include "infrastructure/fs/FileSystem.h"
+#include "infrastructure/web/WebSocket.h"
+#include "presentation/WebServer.h"
+#include "application/WsMessageHandler.h"
+#include "application/WsDataTransformer.h"
 
 ExternalLedActuator externalLedActuator(GREEN_LED_PIN);
 BuzzerActuator buzzerActuator(BUZZER_PIN);
@@ -29,10 +36,18 @@ WebClient webClient;
 SendTemperatureService sendTemperatureService(temperatureSensor, webClient);
 Scheduler scheduler(SCHEDULER_MAX_TASKS_COUNT);
 
-// Файловая система
-//FileSystem fileSystem;
+FileSystem fileSystem;
 
-//WebServer webServer(sensorService);
+FrontRegulator frontRegulator(FRONT_LED_MATRIX);
+MiddleRegulator middleRegulator(MIDDLE_LED_MATRIX);
+BackRegulator backRegulator(BACK_LED_MATRIX);
+
+WsDataTransformer wsDataTransformer(frontRegulator, middleRegulator, backRegulator, temperatureSensor);
+
+LightManagerService lightManagerService(frontRegulator, middleRegulator, backRegulator, scheduler);
+WsMessageHandler wsMessageHandler(lightManagerService);
+WebSocket webSocket(wsMessageHandler, wsDataTransformer);
+WebServer webServer(webSocket, fileSystem);
 
 void setup() {
     Serial.begin(115200);
@@ -51,22 +66,18 @@ void setup() {
         sendTemperatureService.send();
     });
 
-    // Работа с файловой системой
-    //if (fileSystem.writeFile("/config.txt", "Hello, LittleFS!")) {
-    //    Serial.println("File written successfully");
-    //}
-
-    //String data = fileSystem.readFile("/config.txt");
-    //Serial.println("File content: " + data);
-
-    // Запуск веб-сервера
-    //webServer.begin();
+    webServer.begin();
 }
 
 void loop() {
     wifiManager.reconnect();
+
     temperatureSensor.update();
+    frontRegulator.update();
+    middleRegulator.update();
+    backRegulator.update();
+
     scheduler.run();
 
-    //webServer.handleClient();  // Обработка HTTP-запросов
+    webServer.handleClient();
 }

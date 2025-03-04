@@ -4,7 +4,7 @@
     #include <Arduino.h>
     #include "Observer.h"
     #include "presentation/EventType.h"
-    #include "infrastructure/BuzzerActuator.h"
+    #include "infrastructure/actuators/BuzzerActuator.h"
 
     class BuzzerObserver : public Observer {
         private:

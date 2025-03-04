@@ -13,9 +13,9 @@
     extern const int GREEN_LED_PIN;
     extern const int BUZZER_PIN;
 
-    //extern const int LEFT_LED_MATRIX;
-    //extern const int CENTER_LED_MATRIX;
-    //extern const int RIGHT_LED_MATRIX;
+    extern const int FRONT_LED_MATRIX;
+    extern const int MIDDLE_LED_MATRIX;
+    extern const int BACK_LED_MATRIX;
 
     extern const int BOARD_LED;
 

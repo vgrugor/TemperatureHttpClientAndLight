@@ -13,6 +13,10 @@ void SerialObserver::update(EventType eventType, const String& message) {
         //temperature events
         case EventType::READ_TEMPERATURE: text = "Read temperature data. Temperature: " + message + "°C"; break;
         case EventType::SEND_TEMPERATURE: text = "Send temperature data. Temperature: " + message + "°C"; break;
+
+        //timer events
+        case EventType::TIMER_SET: text = "Timer set"; break;
+        case EventType::TIMER_APPLIED: text = "Timer applied"; break;
     }
 
     Serial.println(text);

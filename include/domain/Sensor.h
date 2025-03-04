@@ -12,7 +12,7 @@ class Sensor : public Device {
     public:
         Sensor(unsigned long updateInterval);
         virtual float readValue() = 0;
-        float getLastValue() const;
+        float getLastValue();
         void update() override;
 };
 

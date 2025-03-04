@@ -4,7 +4,7 @@
     #include <Arduino.h>
     #include "Observer.h"
     #include "presentation/EventType.h"
-    #include "infrastructure/ExternalLedActuator.h"
+    #include "infrastructure/actuators/ExternalLedActuator.h"
 
     class LedObserver : public Observer {
         private:
