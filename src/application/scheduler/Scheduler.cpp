@@ -13,7 +13,7 @@ void Scheduler::addTask(String taskId, unsigned long interval, std::function<voi
     for (int i = 0; i < taskCount; i++) {
         if (!taskId.isEmpty() && tasks[i].taskId == taskId) {
             tasks[i].interval = interval;
-            tasks[i].lastRun = 0;
+            tasks[i].lastRun = millis();
             tasks[i].callback = callback;
             tasks[i].repeat = repeat;
 
@@ -22,7 +22,7 @@ void Scheduler::addTask(String taskId, unsigned long interval, std::function<voi
     }
 
     if (taskCount < capacity) {
-        tasks[taskCount] = {taskId, interval, 0, callback, repeat};
+        tasks[taskCount] = {taskId, interval, millis(), callback, repeat};
         taskCount++;
     }
 }
