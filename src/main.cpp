@@ -1,3 +1,4 @@
+#include <ArduinoOTA.h>
 #include <Arduino.h>
 #include "infrastructure/sensors/DS18B20Sensor.h"
 #include "infrastructure/env.h"
@@ -80,6 +81,10 @@ void setup() {
     );
 
     webServer.begin();
+
+    ArduinoOTA.setHostname("ESP8266-OTA");
+    ArduinoOTA.setPassword("your_password");
+    ArduinoOTA.begin();
 }
 
 void loop() {
@@ -93,4 +98,6 @@ void loop() {
     scheduler.run();
 
     webServer.handleClient();
+
+    ArduinoOTA.handle();
 }

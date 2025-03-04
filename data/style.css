@@ -18,6 +18,7 @@ html {
   }
   body {
     margin: 0;
+    background-color: aquamarine;
   }
   .content {
     padding: 30px;
