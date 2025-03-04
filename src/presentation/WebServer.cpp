@@ -21,6 +21,7 @@ void WebServer::begin() {
 
 void WebServer::handleRoot(AsyncWebServerRequest* request) {
     String html = fileSystem.readFile("/index.html");
+
     if (html.length() > 0) {
         request->send(200, "text/html", html);
     } else {
