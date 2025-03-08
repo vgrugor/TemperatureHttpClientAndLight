@@ -4,6 +4,9 @@
 
     #include "Arduino.h"
 
+    extern const char* OTA_HOSTNAME;
+    extern const char* OTA_PASSWORD;
+
     extern const char* WIFI_SSID;
     extern const char* WIFI_PASSWORD;
     extern const char* WIFI_IP;

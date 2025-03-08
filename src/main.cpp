@@ -1,4 +1,3 @@
-#include <ArduinoOTA.h>
 #include <Arduino.h>
 #include "infrastructure/sensors/DS18B20Sensor.h"
 #include "infrastructure/env.h"
@@ -23,6 +22,7 @@
 #include "application/WsMessageHandler.h"
 #include "application/WsDataTransformer.h"
 #include "application/scheduler/TaskIds.h"
+#include "infrastructure/loaders/OTALoader.h"
 
 DS18B20Sensor temperatureSensor(TEMPERATURE_SENSOR_PIN, TEMPERATURE_READ_PERIOD);
 WiFiManager wifiManager(WIFI_SSID, WIFI_PASSWORD, WIFI_IP, WIFI_GATEWAY, WIFI_SUBNET);
@@ -53,6 +53,8 @@ WebSocketObserver webSocketObserver(webSocket);
 
 EventNotifier& eventNotifier = EventNotifier::getInstance();
 
+OTALoader OTA(OTA_HOSTNAME, OTA_PASSWORD);
+
 void setup() {
     Serial.begin(115200);
 
@@ -82,9 +84,7 @@ void setup() {
 
     webServer.begin();
 
-    ArduinoOTA.setHostname("ESP8266-OTA");
-    ArduinoOTA.setPassword("your_password");
-    ArduinoOTA.begin();
+    OTA.begin();
 }
 
 void loop() {
@@ -99,5 +99,5 @@ void loop() {
 
     webServer.handleClient();
 
-    ArduinoOTA.handle();
+    OTA.handle();
 }
