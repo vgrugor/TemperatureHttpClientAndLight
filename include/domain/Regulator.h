@@ -14,8 +14,8 @@
 
         public:
             const int DELAY_SET_LEVEL = 2000;
-            const int MAX_LEVEL = 1023;
-            const int MIN_LEVEL = 0;
+            static const int MAX_LEVEL = 255;
+            static const int MIN_LEVEL = 0;
             Regulator(int pin);
             void setLevel(uint16_t level);
             void update() override;

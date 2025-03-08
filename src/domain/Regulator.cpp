@@ -32,8 +32,8 @@ int Regulator::getNeedleLevel() {
 }
 
 void Regulator::setLevel(uint16_t level) {
-    if (level > 1023) {
-        level = 1023;
+    if (level > Regulator::MAX_LEVEL) {
+        level = Regulator::MAX_LEVEL;
     }
 
     uint16_t diff = abs((uint16_t)level - (uint16_t)this->currentLevel);

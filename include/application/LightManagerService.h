@@ -22,7 +22,7 @@
             void changeFrontLedMatrixLevel(int level);
             void changeMiddleLedMatrixLevel(int level);
             void changeBackLedMatrixLevel(int level);
+            int mapLevel(int level);
     };
-
 
 #endif // LIGHT_MANAGER_SERVICE_H

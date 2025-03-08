@@ -12,9 +12,11 @@ LightManagerService::LightManagerService(
 {}
 
 void LightManagerService::changeAllLedMatrixLevel(int level) {
-    this->frontRegulator.setLevel(level);
-    this->middleRegulator.setLevel(level);
-    this->backRegulator.setLevel(level);
+    int mappedLevel = this->mapLevel(level);
+
+    this->frontRegulator.setLevel(mappedLevel);
+    this->middleRegulator.setLevel(mappedLevel);
+    this->backRegulator.setLevel(mappedLevel);
 }
 
 void LightManagerService::changeTimerMinute(int timerMinute) {
@@ -39,13 +41,29 @@ void LightManagerService::changeTimerMinute(int timerMinute) {
 }
 
 void LightManagerService::changeFrontLedMatrixLevel(int level) {
-    this->frontRegulator.setLevel(level);
+    int mappedLevel = this->mapLevel(level);
+
+    this->frontRegulator.setLevel(mappedLevel);
 }
 
 void LightManagerService::changeMiddleLedMatrixLevel(int level) {
-    this->middleRegulator.setLevel(level);
+    int mappedLevel = this->mapLevel(level);
+
+    this->middleRegulator.setLevel(mappedLevel);
 }
 
 void LightManagerService::changeBackLedMatrixLevel(int level) {
-    this->backRegulator.setLevel(level);
+    int mappedLevel = this->mapLevel(level);
+
+    this->backRegulator.setLevel(mappedLevel);
+}
+
+int LightManagerService::mapLevel(int level) {
+    if (level > 100) {
+        level = 100;
+    } else if (level < 0) {
+        level = 0;
+    }
+
+    return map(level, 0, 100, Regulator::MIN_LEVEL, Regulator::MAX_LEVEL);
 }
