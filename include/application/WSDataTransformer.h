@@ -32,6 +32,7 @@
             BackRegulator& backRegulator;
             DS18B20Sensor& temperatureSensor;
             SettingsStorage& settingsStorage;
+            int mapLevel(int level);
     };
 
 #endif //WS_DATA_TRANSFORMER_H

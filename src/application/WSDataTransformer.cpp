@@ -14,23 +14,31 @@ WsDataTransformer::WsDataTransformer(
 
 int WsDataTransformer::getFrontLedMatrixLevel()
 {
-    return this->frontRegulator.getNeedleLevel();
+    int mappedLevel = this->mapLevel(this->frontRegulator.getNeedleLevel());
+
+    return mappedLevel;
 }
 
 int WsDataTransformer::getMiddleLedMatrixLevel()
 {
-    return this->middleRegulator.getNeedleLevel();
+    int mappedLevel = this->mapLevel(this->middleRegulator.getNeedleLevel());
+
+    return mappedLevel;
 }
 
 int WsDataTransformer::getBackLedMatrixLevel()
 {
-    return this->backRegulator.getNeedleLevel();
+    int mappedLevel = this->mapLevel( this->backRegulator.getNeedleLevel());
+
+    return mappedLevel;
 }
 
 int WsDataTransformer::getAllLedMatrixLevel()
 {
     if (this->frontRegulator.getNeedleLevel() == this->middleRegulator.getNeedleLevel() && this->middleRegulator.getNeedleLevel() == this->backRegulator.getNeedleLevel()) {
-        return this->frontRegulator.getNeedleLevel();
+        int mappedLevel = this->mapLevel(this->frontRegulator.getNeedleLevel());
+
+        return mappedLevel;
     } else {
         return 0;
     }
@@ -58,4 +66,8 @@ String WsDataTransformer::toJSON()
     sliderValues["sliderValue6"] = String(this->getTemperature());
 
     return JSON.stringify(sliderValues);
+}
+
+int WsDataTransformer::mapLevel(int level) {
+    return map(level, Regulator::MIN_LEVEL, Regulator::MAX_LEVEL, 0, 100);
 }

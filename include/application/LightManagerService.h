@@ -14,6 +14,7 @@
             Regulator& middleRegulator;
             Regulator& backRegulator;
             Scheduler& scheduler;
+            int mapLevel(int level);
 
         public:
             LightManagerService(Regulator& frontRegulator, Regulator& middleRegulator, Regulator& backRegulator, Scheduler& scheduler);
@@ -22,7 +23,6 @@
             void changeFrontLedMatrixLevel(int level);
             void changeMiddleLedMatrixLevel(int level);
             void changeBackLedMatrixLevel(int level);
-            int mapLevel(int level);
     };
 
 #endif // LIGHT_MANAGER_SERVICE_H
