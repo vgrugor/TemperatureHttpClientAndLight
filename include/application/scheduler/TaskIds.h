@@ -7,6 +7,7 @@
         const String LIGHT_DISABLE_TASK = "lightDisableTask";
         const String TEMPERATURE_FIRST_READ_AFTER_LOAD = "temperatureFirstReadAfterLoad";
         const String TEMPERATURE_SEND = "temperatureSend";
+        const String WS_CLIENT_UPDATE = "wsClientUpdate";
     }
 
 #endif

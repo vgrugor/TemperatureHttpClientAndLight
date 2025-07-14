@@ -28,7 +28,7 @@ int WsDataTransformer::getMiddleLedMatrixLevel()
 
 int WsDataTransformer::getBackLedMatrixLevel()
 {
-    int mappedLevel = this->mapLevel( this->backRegulator.getNeedleLevel());
+    int mappedLevel = this->mapLevel(this->backRegulator.getNeedleLevel());
 
     return mappedLevel;
 }

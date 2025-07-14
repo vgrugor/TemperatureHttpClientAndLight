@@ -82,6 +82,14 @@ void setup() {
         }
     );
 
+    scheduler.addTask(
+        TaskIds::WS_CLIENT_UPDATE,
+        WS_CLIENT_UPDATE_PERIOD, 
+        []() {
+            webSocket.notifyClients();
+        }
+    );
+
     webServer.begin();
 
     OTA.begin();
