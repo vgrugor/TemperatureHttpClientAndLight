@@ -15,7 +15,7 @@
         public:
             const int DELAY_SET_LEVEL = 2000;
             //static const int MAX_LEVEL = 255;
-            static const int MAX_LEVEL = 125;  //TODO: delete after change transistors and power source
+            static const int MAX_LEVEL = 200;  //TODO: delete if need max power
             static const int MIN_LEVEL = 0;
             Regulator(int pin);
             void setLevel(uint16_t level);
