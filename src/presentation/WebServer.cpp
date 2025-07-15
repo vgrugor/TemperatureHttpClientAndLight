@@ -12,7 +12,7 @@ void WebServer::begin() {
     server.addHandler(webSocket.getWebSocketObject());
 
     server.on("/", HTTP_GET, [this](AsyncWebServerRequest* request) {
-        handleRoot(request);
+        this->handleRoot(request);
     });
 
     server.serveStatic("/", LittleFS, "/");

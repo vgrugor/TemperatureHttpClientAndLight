@@ -2,14 +2,24 @@
 
 var gateway = `ws://${window.location.hostname}/ws`;
 var websocket;
-window.addEventListener('load', onload);
+var isConnected = false;
 
-function onload(event) {
+window.addEventListener('load', () => {
+    checkOnlineStatus();
     initWebSocket();
-}
+});
 
-function getValues(){
-    websocket.send("getValues");
+function checkOnlineStatus() {
+    fetch("/", { method: 'HEAD', cache: "no-store" })
+        .then(response => {
+            if (!response.ok) throw new Error();
+            console.log("ESP online");
+        })
+        .catch(err => {
+            document.getElementById("connection-status").style.display = "block";
+            document.getElementById("connection-status").innerText =
+                "⚠️ Контролер недоступний. Сторінка можливо збережена браузером офлайн.";
+        });
 }
 
 function initWebSocket() {
@@ -22,20 +32,39 @@ function initWebSocket() {
 
 function onOpen(event) {
     console.log('Connection opened');
+    isConnected = true;
+    document.getElementById("connection-status").style.display = "none";
     getValues();
 }
 
 function onClose(event) {
     console.log('Connection closed');
+    isConnected = false;
+    document.getElementById("connection-status").style.display = "block";
     setTimeout(initWebSocket, 2000);
 }
 
+function getValues() {
+    websocket.send("getValues");
+}
+
 function updateSliderPWM(element) {
-    var sliderNumber = element.id.charAt(element.id.length-1);
-    var sliderValue = document.getElementById(element.id).value;
-    document.getElementById("sliderValue"+sliderNumber).innerHTML = sliderValue;
-    console.log(sliderValue);
-    websocket.send(sliderNumber+"s"+sliderValue.toString());
+    var sliderNumber = element.id.charAt(element.id.length - 1);
+    var slider = document.getElementById(element.id);
+    var newValue = slider.value;
+    var valueDisplay = document.getElementById("sliderValue" + sliderNumber);
+    var oldValue = valueDisplay.innerHTML;
+
+    valueDisplay.innerHTML = newValue;
+
+    if (isConnected) {
+        websocket.send(sliderNumber + "s" + newValue.toString());
+    } else {
+        alert("⚠️ Контролер недоступний. Зміни не збережено.");
+
+        slider.value = oldValue;
+        valueDisplay.innerHTML = oldValue;
+    }
 }
 
 function onMessage(event) {
@@ -43,11 +72,12 @@ function onMessage(event) {
     var myObj = JSON.parse(event.data);
     var keys = Object.keys(myObj);
 
-    for (var i = 0; i < keys.length; i++){
+    for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         document.getElementById(key).innerHTML = myObj[key];
-        if (document.getElementById("slider"+ (i+1))) {
-            document.getElementById("slider"+ (i+1).toString()).value = myObj[key];
+        var slider = document.getElementById("slider" + (i + 1));
+        if (slider) {
+            slider.value = myObj[key];
         }
     }
 }
