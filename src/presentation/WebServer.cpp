@@ -11,22 +11,17 @@ WebServer::WebServer(
 void WebServer::begin() {
     server.addHandler(webSocket.getWebSocketObject());
 
+    server.serveStatic("/", LittleFS, "/");
+
     server.on("/", HTTP_GET, [this](AsyncWebServerRequest* request) {
         this->handleRoot(request);
     });
 
-    server.serveStatic("/", LittleFS, "/");
     server.begin();
 }
 
 void WebServer::handleRoot(AsyncWebServerRequest* request) {
-    String html = fileSystem.readFile("/index.html");
-
-    if (html.length() > 0) {
-        request->send(200, "text/html", html);
-    } else {
-        request->send(404, "text/plain", "File not found");
-    }
+    request->send(LittleFS, "/index.html", "text/html");
 }
 
 void WebServer::handleClient() {}
