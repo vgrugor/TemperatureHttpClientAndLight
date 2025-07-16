@@ -16,6 +16,11 @@ void WebSocket::handleEvent(AsyncWebSocket* server, AsyncWebSocketClient* client
     switch (type) {
         case WS_EVT_CONNECT:
             Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+
+            if (webSocket.count() > 5) {
+                this->cleanupClients();
+            }
+
             break;
         case WS_EVT_DISCONNECT:
             Serial.printf("WebSocket client #%u disconnected\n", client->id());
