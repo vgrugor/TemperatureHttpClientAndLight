@@ -13,6 +13,10 @@ void WebServer::begin() {
 
     server.serveStatic("/", LittleFS, "/");
 
+    server.on("/", HTTP_HEAD, [this](AsyncWebServerRequest* request) {
+       request->send(200);
+    });
+
     server.on("/", HTTP_GET, [this](AsyncWebServerRequest* request) {
         this->handleRoot(request);
     });
